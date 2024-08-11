@@ -6,7 +6,16 @@ import React, {
   useEffect
 } from 'react'
 import classNames from 'classnames';
-import {SearchBar, Icon} from '@nutui/nutui-react'
+import {SearchBar} from '@nutui/nutui-react'
+import {
+  ArrowLeft,
+  Eye,
+  Marshalling,
+  Photograph,
+  Refresh,
+  Search,
+  Trash,
+} from '@nutui/icons-react-taro'
 import { useConfig } from '@/packages/configprovider'
 import bem from '@/utils/bem'
 import { IComponent } from '@/utils/typings'
@@ -38,10 +47,11 @@ export interface SearchHistoryProps extends IComponent {
   onClickBackIcon: () => void
   onClickSearchItem: (searchItem: IsearchItem) => void
   onClickRightInIcon: () => void
-  onSearchBarChange: (value: string, event: Event) => void
+  onSearchBarChange: (value: string) => void
   onDelete: () => void
   onDeleteSingle: (item: IsearchItem) => void
   onRefresh: () => void
+  placeholder: string
 }
 
 export const SearchHistory: FunctionComponent<
@@ -58,11 +68,11 @@ export const SearchHistory: FunctionComponent<
     keyword = '',
     recentSearchData = [],
     searchDiscoverData = [],
-    leftInIcon = <Icon name="search" size="12" />,
+    leftInIcon = <Search size="12" />,
     rightOutIcon = locale.searchHistory.rightOutIcon,
-    rightInIcon = <Icon name="photograph" size="12" />,
-    openEyeIcon = <Icon name="eye" />,
-    closeEyeIcon = <Icon name="marshalling" />,
+    rightInIcon = <Photograph size="12" />,
+    openEyeIcon = <Eye />,
+    closeEyeIcon = <Marshalling />,
     refreshIcon = "refresh",
     searchDiscoverExtra,
     noDiscoverDataText = locale.searchHistory.noDiscoverDataText,
@@ -76,6 +86,7 @@ export const SearchHistory: FunctionComponent<
     onDelete,
     onDeleteSingle,
     onRefresh,
+    placeholder,
     ...rest
   } = {
     ...props,
@@ -85,9 +96,9 @@ export const SearchHistory: FunctionComponent<
   const [eyeOpened, setEyeOpened] = useState<boolean>(true)
   const [isShowDeleteSearchItemIcon, setIsShowDeleteSearchItemIcon] = useState<boolean>(false)
 
-  const handleChange = (val: string, event: Event) => {
+  const handleChange = (val: string) => {
     setValue(val)
-    onSearchBarChange && onSearchBarChange(val, event)
+    onSearchBarChange && onSearchBarChange(val)
   }
 
   const handleClear = () => {
@@ -101,14 +112,14 @@ export const SearchHistory: FunctionComponent<
 
   const renderSearchBar = () => {
     return <SearchBar
-      placeholder="input search text"
+      placeholder={placeholder}
       shape="round"
       className={classNames({'nut-searchbar-no-left-in-icon': leftInIcon === ''})}
       value={value}
-      leftinIcon={leftInIcon}
-      rightinIcon={<div onClick={() => onClickRightInIcon && onClickRightInIcon()}>{rightInIcon}</div>}
-      leftoutIcon={<div onClick={() => onClickBackIcon && onClickBackIcon()}>{typeof backIcon === 'string' ? <Icon name={backIcon} size="14" /> : backIcon}</div>}
-      rightoutIcon={<div onClick={() => handleSearch(value as string)}>{rightOutIcon}</div>}
+      leftIn={leftInIcon}
+      rightIn={<div onClick={() => onClickRightInIcon && onClickRightInIcon()}>{rightInIcon}</div>}
+      left={<div onClick={() => onClickBackIcon && onClickBackIcon()}>{typeof backIcon === 'string' ? <ArrowLeft size="14" /> : backIcon}</div>}
+      right={<div onClick={() => handleSearch(value as string)}>{rightOutIcon}</div>}
       onClear={handleClear}
       onChange={handleChange}
     />
@@ -132,24 +143,24 @@ export const SearchHistory: FunctionComponent<
 
   const renderSearchHistoryResult = () => {
     return <div className={b('recent')}>
-          <div className={b('recent-tit')}>
-            <div>{recentSearchText}</div>
-            {
-              isShowDeleteSearchItemIcon ? <div className={b('recent-divider-box')}>
-                <div onClick={handleDelete}>{locale.searchHistory.deleteAll}</div>
-                <div className={b('recent-divider')}>|</div>
-                <div onClick={() => setIsShowDeleteSearchItemIcon(false)}>{locale.searchHistory.finish}</div>
-              </div> : <div onClick={handleDelete}>{typeof deleteIcon === 'string' ? <Icon name={deleteIcon} /> : deleteIcon}</div>
-            }
-          </div>
-          {
-            <div className={b('recent-tags')}>
-              {recentSearchData.map((item, index) => {
-                return <a key={index} onClick={()=>handleClickSearchItem(item)}>{item.key}{isShowDeleteSearchItemIcon && <span>X</span>}</a>
-              })}
-            </div>
-          }
+      <div className={b('recent-tit')}>
+        <div>{recentSearchText}</div>
+        {
+          isShowDeleteSearchItemIcon ? <div className={b('recent-divider-box')}>
+            <div onClick={handleDelete}>{locale.searchHistory.deleteAll}</div>
+            <div className={b('recent-divider')}>|</div>
+            <div onClick={() => setIsShowDeleteSearchItemIcon(false)}>{locale.searchHistory.finish}</div>
+          </div> : <div onClick={handleDelete}>{typeof deleteIcon === 'string' ? <Trash /> : deleteIcon}</div>
+        }
       </div>
+      {
+        <div className={b('recent-tags')}>
+          {recentSearchData.map((item, index) => {
+            return <a key={index} onClick={()=>handleClickSearchItem(item)}>{item.key}{isShowDeleteSearchItemIcon && <span>X</span>}</a>
+          })}
+        </div>
+      }
+    </div>
   }
 
   const handleToggleEye =(eyeOpened: boolean) => {
@@ -158,28 +169,28 @@ export const SearchHistory: FunctionComponent<
 
   const renderSearchDiscover = () => {
     return <div className={b('discover')}>
-        <div className={b('discover-tit')}>
-          <div>{searchDiscoverText}{searchDiscoverExtra}</div>
-          <div className={b('discover-icons')}>
-            {refreshIcon && <div className={b('discover-refresh')} onClick={() => onRefresh && onRefresh()}><Icon name={refreshIcon} /></div>}
-            {
-              eyeOpened ? <div onClick={() => handleToggleEye(false)}>{openEyeIcon}</div> : <div className='close-eye'>
-                {!noDiscoverDataText && <div className='close-eye-extra'>{locale.searchHistory.hidden}</div>}
-                <div onClick={() => handleToggleEye(true)}>{closeEyeIcon}</div>
-              </div>
-            }
-          </div>
-        </div>
+      <div className={b('discover-tit')}>
+        <div>{searchDiscoverText}{searchDiscoverExtra}</div>
+        <div className={b('discover-icons')}>
+          {refreshIcon && <div className={b('discover-refresh')} onClick={() => onRefresh && onRefresh()}><Refresh /></div>}
           {
-            searchDiscoverData.length > 0 && eyeOpened && <div className={b('recent-tags')}>
-              {searchDiscoverData.map((item, index) => {
-                return <a key={index} onClick={()=>handleClickSearchItem(item)}>{item.key}</a>
-              })}
+            eyeOpened ? <div onClick={() => handleToggleEye(false)}>{openEyeIcon}</div> : <div className='close-eye'>
+              {!noDiscoverDataText && <div className='close-eye-extra'>{locale.searchHistory.hidden}</div>}
+              <div onClick={() => handleToggleEye(true)}>{closeEyeIcon}</div>
             </div>
           }
-          {
-            searchDiscoverData.length > 0 && !eyeOpened && noDiscoverDataText && <div className='no-discover-data'>{noDiscoverDataText}</div>
-          }
+        </div>
+      </div>
+      {
+        searchDiscoverData.length > 0 && eyeOpened && <div className={b('recent-tags')}>
+          {searchDiscoverData.map((item, index) => {
+            return <a key={index} onClick={()=>handleClickSearchItem(item)}>{item.key}</a>
+          })}
+          </div>
+      }
+      {
+        searchDiscoverData.length > 0 && !eyeOpened && noDiscoverDataText && <div className='no-discover-data'>{noDiscoverDataText}</div>
+      }
     </div>
   }
 
