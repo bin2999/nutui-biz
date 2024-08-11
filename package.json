@@ -1,6 +1,6 @@
 {
   "name": "@bb2030/nutui-biz",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "style": "dist/style.css",
   "main": "dist/nutui.biz.umd.js",
   "module": "dist/esm/nutui-biz.es.js",
@@ -93,7 +93,7 @@
     "@bem-react/classname": "^1.5.10",
     "@nutui/icons-react-taro": "^1.0.4",
     "@nutui/nutui-react": "^2.6.16",
-    "@nutui/nutui-react-taro": "^1.4.7",
+    "@nutui/nutui-react-taro": "^2.6.16",
     "@react-spring/web": "^9.3.2",
     "@use-gesture/react": "^10.2.9",
     "classnames": "^2.3.1",
