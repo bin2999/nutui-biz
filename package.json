@@ -1,5 +1,5 @@
 {
-  "name": "@nutui/nutui-biz",
+  "name": "@bb2030/nutui-biz",
   "version": "1.0.0",
   "style": "dist/style.css",
   "main": "dist/nutui.biz.umd.js",
@@ -29,7 +29,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jdf2e/nutui-biz.git"
+    "url": "https://github.com/bin2999/nutui-biz.git"
   },
   "publishConfig": {
     "access": "public",
