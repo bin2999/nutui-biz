@@ -1,5 +1,4 @@
-import dts from 'rollup-plugin-dts'
-import del from 'rollup-plugin-delete'
+import { dts } from "rollup-plugin-dts";
 
 console.log(process.env.npm_config_taro)
 
@@ -19,10 +18,6 @@ const config = [
           },
         },
       }),
-      // del({
-      //   hook: 'buildEnd',
-      //   targets: ['./dist/esm/types', './dist/types/*.build.ts'],
-      // }),
     ],
   },
 ]
