@@ -52,6 +52,7 @@ export interface SearchHistoryProps extends IComponent {
   onDeleteSingle: (item: IsearchItem) => void
   onRefresh: () => void
   placeholder: string
+  autoFocus: boolean
 }
 
 export const SearchHistory: FunctionComponent<
@@ -87,6 +88,7 @@ export const SearchHistory: FunctionComponent<
     onDeleteSingle,
     onRefresh,
     placeholder,
+    autoFocus,
     ...rest
   } = {
     ...props,
@@ -112,6 +114,7 @@ export const SearchHistory: FunctionComponent<
 
   const renderSearchBar = () => {
     return <SearchBar
+      autoFocus={autoFocus}
       placeholder={placeholder}
       shape="round"
       className={classNames({'nut-searchbar-no-left-in-icon': leftInIcon === ''})}
